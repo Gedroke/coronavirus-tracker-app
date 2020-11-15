@@ -2,6 +2,7 @@ package com.coronavirus.tracker.coronavirustrackerapp.service;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ public class CoronavirusDataService {
 
     // == public constant ==
     @PostConstruct
+    @Scheduled(cron="0 0 9 * * ?") // This application will run every day at 9 am (local)
     public void fetchData() throws IOException, InterruptedException {
 
         // Creating HTTP Client
