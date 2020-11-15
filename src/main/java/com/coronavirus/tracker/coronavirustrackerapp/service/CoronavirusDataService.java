@@ -1,9 +1,12 @@
 package com.coronavirus.tracker.coronavirustrackerapp.service;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -13,7 +16,7 @@ import java.net.http.HttpResponse;
 public class CoronavirusDataService {
 
     // == constant - URI ==
-    private final URI COVID19_CONFIRMED_GLOBAL = URI.create("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv");
+    private static final URI COVID19_CONFIRMED_GLOBAL = URI.create("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv");
 
     // == public constant ==
     @PostConstruct
@@ -31,7 +34,13 @@ public class CoronavirusDataService {
         HttpResponse<String> httpResponse
                 = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        // Console print out
-        System.out.println(httpResponse.body());
+        // CSV reader - Parsing in the right format
+        StringReader csvBodyReader  = new StringReader(httpResponse.body());
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+        for (CSVRecord record : records) {
+            String state = record.get("Province/State");
+            String country = record.get("Country/Region");
+            System.out.println(state +"\n"+ country);
+        }
     }
 }
