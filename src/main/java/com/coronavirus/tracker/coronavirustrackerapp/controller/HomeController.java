@@ -13,12 +13,13 @@ public class HomeController {
 
     // == Service autowired ==
     @Autowired
-    private CoronavirusDataService coronavirusDataService;
+    CoronavirusDataService coronavirusDataService;
 
     // == Home Mapping ==
     @GetMapping(AttributeMapping.HOME_ATTRIBUTE)
     public String home(Model model) {
-        model.addAttribute("locationStat", coronavirusDataService.getAllStats());
+        model.addAttribute("homeTitle", "Coronavirus Tracker App");
+        model.addAttribute("locationStats", coronavirusDataService.getAllStats());
         return ViewMapping.HOME_VIEW;
     }
 }
