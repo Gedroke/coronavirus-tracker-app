@@ -56,14 +56,25 @@ public class CoronavirusDataService {
             locationStat.setState(record.get("Province/State"));
             locationStat.setCountry(record.get("Country/Region"));
 
-            // Parsing the string to an int and access to the last record data
-            locationStat.setLatestTotalCases(Integer.parseInt(record.get(record.size() - 1)));
+            // Local variable for current and previous (day) reported cases and parse it to an int
+            int currentDay = Integer.parseInt(record.get(record.size() - 1));
+            int previousDay = Integer.parseInt(record.get(record.size() - 2));
+
+            // Creating a delta to track the evolution of the virus - From Previous to Current day
+            int delta = currentDay - previousDay;
+
+            // Set the data in our object
+            locationStat.setLatestTotalCases(currentDay);
+            locationStat.setPreviousTotalCases(previousDay);
+            locationStat.setDelta(delta);
+
 
             // Populate the temporary list with data field
             tempStats.add(locationStat);
         }
         // Populate the final list with the temp - This is a way to avoid some concurrency issues but it's not 100% proof
         this.allStats = tempStats;
+
     }
 
 
