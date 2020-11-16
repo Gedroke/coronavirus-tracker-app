@@ -8,11 +8,11 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LocationStat {
+public class LocationStats {
 
     // == fields ==
     private String state;
     private String country;
-    private int LatestTotalCases;
+    private int latestTotalCases;
 
 }
